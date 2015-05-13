@@ -1,0 +1,6 @@
+## The following requirements were added by pip freeze:
+backports.ssl-match-hostname==3.4.0.2
+certifi==2015.4.28
+six==1.9.0
+-e git+https://github.com/legnaleurc/tornadio2.git@f456defbbb84b3c687d590030c0de79550442d6a#egg=TornadIO2-master
+tornado==4.1

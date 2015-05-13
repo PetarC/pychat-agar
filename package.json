@@ -1,0 +1,19 @@
+{
+  "name": "pychat-agar",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "BSD-2-Clause",
+  "devDependencies": {
+    "bower": "~1.4.1",
+    "http-server": "~0.8.0",
+    "coffee-script": "~1.9.2"
+  },
+  "scripts": {
+    "runserver": "node_modules/.bin/http-server"
+  }
+}

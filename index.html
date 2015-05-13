@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Test</title>
+  <!-- <link href='http://fonts.googleapis.com/css?family=Ubuntu:700' rel='stylesheet' type='text/css'> -->
+  <style type="text/css">
+  #canvas {
+  border: 1px solid;
+  }
+  #canvas-div {
+    width: 600px;
+    height: 600px;
+    background-color: rgba(96, 187, 156, 0.07);
+    border: dotted 1px; 
+    float: right;
+  }
+  #canvas-div .object {
+    width: 100px;
+    height: 100px;
+    background-color: cadetblue;
+    top: 100px;
+    left: 100px;
+    position: relative;
+    border: dotted red 1px;
+
+    transform: matrix(1.0, 2.0, 3.0, 4.0, 5.0, 6.0); 
+  }
+  </style>
+  <!-- <script type="text/javascript" src="js/coffee-script.js"></script> -->
+  <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+  <script type="text/javascript" src="bower_components/underscore/underscore-min.js"></script>
+  <script type="text/javascript" src="bower_components/backbone/backbone.js"></script>
+  <script type="text/javascript" src="bower_components/fabric/dist/fabric.min.js"></script>
+  <script type="text/javascript" src="bower_components/victor/build/victor.min.js"></script>
+</head>
+<body>
+  <canvas id="canvas" width="600" height="600"></canvas>
+  <!-- <div id="canvas-div"><div class="object"></div></div> -->
+    <!-- <script type="text/coffeescript" src="js/main.coffee"></script> -->
+    <script type="text/javascript" src="js/main.js"></script>
+</body>
+</html>

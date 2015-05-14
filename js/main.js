@@ -18,7 +18,10 @@ var main;
     initialize: function(options) {
       this.attributes = _.extend(this.attributes, options);
       this.is_player = this.attributes.is_player;
-      this.v_direction = null;
+      this.speed = 50;
+      this.v_mouse_click = null;
+      this.v_speed = null;
+
       this.helpers = {};
 
       this.lines = [];
@@ -49,7 +52,9 @@ var main;
       x = e.e.layerX;
       y = e.e.layerY;
       console.log('Click at', {x: x, y: y})
-      this.v_direction = new Victor(x, y);
+      this.v_mouse_click = new Victor(x, y);
+      var v_current_pos = this.getCurrentPos();
+      this.v_speed = new Victor(this.v_mouse_click.x - v_current_pos.x, this.v_mouse_click.y - v_current_pos.y).normalize();
       this.redrawDirectionVector();
     },
     getCurrentPos: function(){
@@ -60,16 +65,17 @@ var main;
       return new Victor(v_pos.x + this.item.radius, v_pos.y + this.item.radius);
     },
     redrawDirectionVector: function(){
+      if(this.v_mouse_click === null) return;
       var obj = new fabric.Circle({
-        left: this.v_direction.x,
-        top: this.v_direction.y,
+        left: this.v_mouse_click.x,
+        top: this.v_mouse_click.y,
         radius: 2,
         fill: 'black'
       });
       this.drawHelper('click_point', obj);
 
       var v_item_pos_c = this.getCurrentPosWithRadius();
-      var obj = new fabric.Line([v_item_pos_c.x, v_item_pos_c.y, this.v_direction.x, this.v_direction.y],{
+      var obj = new fabric.Line([v_item_pos_c.x, v_item_pos_c.y, this.v_mouse_click.x, this.v_mouse_click.y],{
         stroke: 'blue'
       });
       this.drawHelper('v_direction', obj);
@@ -90,29 +96,20 @@ var main;
 
       return {tryX: tryX, tryY: tryY};
     },
-    moveItem: function(item, v_direction, speed, time_delta){
-      var tryX, tryY, v_current_pos,
-        v_direction_norm = new Victor(-1.0, 0.0);
+    moveItem: function(item, time_delta){
+      var tryX, tryY, v_current_pos = new Victor(item.left, item.top);
 
-      v_current_pos = new Victor(item.left, item.top);
-
-      var v_direction_pre_norm = new Victor(v_direction.x - v_current_pos.x, v_direction.y - v_current_pos.y);
-      v_direction_norm = v_direction_pre_norm.normalize();
-      
-      var distance = speed * time_delta;
-      var velocity = v_direction_norm.multiply(new Victor(distance, distance));
-      tryX = v_current_pos.x + velocity.x;
-      tryY = v_current_pos.y + velocity.y;
+      tryX = v_current_pos.x + (this.v_speed.x*this.speed*time_delta);
+      tryY = v_current_pos.y + (this.v_speed.y*this.speed*time_delta);
 
       var can_move = this.isCanMove(item, v_current_pos, tryX, tryY);
 
       this.doMove(item, can_move.tryX, can_move.tryY);
     },
     move: function(time_delta){
-      if(this.v_direction == null) return;
-      var speed = 50;
-      var v_direction = this.v_direction;
-      this.moveItem(this.item, v_direction, speed, time_delta);
+      // this.v_speed = this.v_speed || new Victor(-1.0, 0.0);
+      if(this.v_speed == null) return;
+      this.moveItem(this.item, time_delta);
       this.redrawDirectionVector();
     },
     drawHelper: function(name, obj){
@@ -169,11 +166,10 @@ var main;
   };
   
   canvas = new fabric.Canvas('canvas', {
-    selection: false,
-    interactive: false
+    interactive: false,
+    renderOnAddRemove: false,
+    selection: false
   });
-  canvas.select = false;
-  canvas.interactive = false;
 
   new Thing({
     is_player: true,
